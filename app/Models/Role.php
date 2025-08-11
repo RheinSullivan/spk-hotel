@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
+
+    protected $table = 'role';
     protected $guarded = ['id'];
 
-    // 1 Roles bisa dimiliki banyak user
+    // 1 Role bisa dimiliki banyak user
     public function users()
     {
         return $this->hasMany(User::class, 'user_id');

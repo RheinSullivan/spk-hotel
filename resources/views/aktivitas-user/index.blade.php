@@ -1,8 +1,5 @@
 @extends('layouts.app')
 
-@include('hak-akses.create')
-{{-- @include('data-pengguna.edit') --}}
-
 @section('content')
 
 <div class="section-header">
@@ -51,7 +48,7 @@
                                 <td>{{ $log->description }}</td>
                                 <td>{{ $log->created_at->format('d-m-Y H:i:s') }}</td>
                             </tr>
-                            @endforeach                        
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

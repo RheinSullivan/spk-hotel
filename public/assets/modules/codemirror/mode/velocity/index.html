@@ -55,9 +55,9 @@
 
 #define( $hello ) Hello $who #end #set( $who = "World!") $hello ## displays Hello World!
 
-#foreach( $customer in $customerList )
+#foreach( $donatur in $donaturList )
 
-    $foreach.count $customer.Name
+    $foreach.count $donatur.Name
 
     #if( $foo == ${bar})
         it's true!

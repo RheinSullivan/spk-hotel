@@ -84,7 +84,7 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
       return state.tokenize(stream, state);
     } else if (ch == ".") {
       // .1 for 0.1
-      if (support.zerolessFloat && stream.match(/^(?:\d+(?:e[+-]?\d+)?)/i))
+      if (support.zerolesFloat && stream.match(/^(?:\d+(?:e[+-]?\d+)?)/i))
         return "number";
       if (stream.match(/^\.+/))
         return null
@@ -306,7 +306,7 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
     atoms: set("false true null unknown"),
     operatorChars: /^[*+\-%<>!=&|^]/,
     dateSQL: set("date time timestamp"),
-    support: set("ODBCdotTable decimallessFloat zerolessFloat binaryNumber hexNumber doubleQuote nCharCast charsetCast commentHash commentSpaceRequired"),
+    support: set("ODBCdotTable decimallessFloat zerolesFloat binaryNumber hexNumber doubleQuote nCharCast charsetCast commentHash commentSpaceRequired"),
     hooks: {
       "@":   hookVar,
       "`":   hookIdentifier,
@@ -322,7 +322,7 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
     atoms: set("false true null unknown"),
     operatorChars: /^[*+\-%<>!=&|^]/,
     dateSQL: set("date time timestamp"),
-    support: set("ODBCdotTable decimallessFloat zerolessFloat binaryNumber hexNumber doubleQuote nCharCast charsetCast commentHash commentSpaceRequired"),
+    support: set("ODBCdotTable decimallessFloat zerolesFloat binaryNumber hexNumber doubleQuote nCharCast charsetCast commentHash commentSpaceRequired"),
     hooks: {
       "@":   hookVar,
       "`":   hookIdentifier,
@@ -345,7 +345,7 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
     operatorChars: /^[*+\-%<>!=&|/~]/,
     // SQLite is weakly typed, ref: http://sqlite.org/datatype3.html. This is just a list of some common types.
     dateSQL: set("date time timestamp datetime"),
-    support: set("decimallessFloat zerolessFloat"),
+    support: set("decimallessFloat zerolesFloat"),
     identifierQuote: "\"",  //ref: http://sqlite.org/lang_keywords.html
     hooks: {
       // bind-parameters ref:http://sqlite.org/lang_expr.html#varparam
@@ -382,7 +382,7 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
     builtin:    set("abs acos add_months ascii asin atan atan2 average bfile bfilename bigserial bit blob ceil character chartorowid chr clob concat convert cos cosh count dec decode deref dual dump dup_val_on_index empty error exp false float floor found glb greatest hextoraw initcap instr instrb int integer isopen last_day least length lengthb ln lower lpad ltrim lub make_ref max min mlslabel mod months_between natural naturaln nchar nclob new_time next_day nextval nls_charset_decl_len nls_charset_id nls_charset_name nls_initcap nls_lower nls_sort nls_upper nlssort no_data_found notfound null number numeric nvarchar2 nvl others power rawtohex real reftohex round rowcount rowidtochar rowtype rpad rtrim serial sign signtype sin sinh smallint soundex sqlcode sqlerrm sqrt stddev string substr substrb sum sysdate tan tanh to_char text to_date to_label to_multi_byte to_number to_single_byte translate true trunc uid unlogged upper user userenv varchar varchar2 variance varying vsize xml"),
     operatorChars: /^[*+\-%<>!=~]/,
     dateSQL:    set("date time timestamp"),
-    support:    set("doubleQuote nCharCast zerolessFloat binaryNumber hexNumber")
+    support:    set("doubleQuote nCharCast zerolesFloat binaryNumber hexNumber")
   });
 
   // Created to support specific hive keywords
@@ -406,7 +406,7 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
     atoms: set("false true null unknown"),
     operatorChars: /^[*+\-%<>!=&|^\/#@?~]/,
     dateSQL: set("date time timestamp"),
-    support: set("ODBCdotTable decimallessFloat zerolessFloat binaryNumber hexNumber nCharCast charsetCast")
+    support: set("ODBCdotTable decimallessFloat zerolesFloat binaryNumber hexNumber nCharCast charsetCast")
   });
 
   // Google's SQL-like query language, GQL
@@ -428,18 +428,18 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
     atoms: set("false true null unknown"),
     operatorChars: /^[*+\-%<>!=&|^\/#@?~]/,
     dateSQL: set("date time timestamp"),
-    support: set("ODBCdotTable decimallessFloat zerolessFloat binaryNumber hexNumber nCharCast charsetCast")
+    support: set("ODBCdotTable decimallessFloat zerolesFloat binaryNumber hexNumber nCharCast charsetCast")
   });
 
   // Spark SQL
   CodeMirror.defineMIME("text/x-sparksql", {
     name: "sql",
-    keywords: set("add after all alter analyze and anti archive array as asc at between bucket buckets by cache cascade case cast change clear cluster clustered codegen collection column columns comment commit compact compactions compute concatenate cost create cross cube current current_date current_timestamp database databases datata dbproperties defined delete delimited desc describe dfs directories distinct distribute drop else end escaped except exchange exists explain export extended external false fields fileformat first following for format formatted from full function functions global grant group grouping having if ignore import in index indexes inner inpath inputformat insert intersect interval into is items join keys last lateral lazy left like limit lines list load local location lock locks logical macro map minus msck natural no not null nulls of on option options or order out outer outputformat over overwrite partition partitioned partitions percent preceding principals purge range recordreader recordwriter recover reduce refresh regexp rename repair replace reset restrict revoke right rlike role roles rollback rollup row rows schema schemas select semi separated serde serdeproperties set sets show skewed sort sorted start statistics stored stratify struct table tables tablesample tblproperties temp temporary terminated then to touch transaction transactions transform true truncate unarchive unbounded uncache union unlock unset use using values view when where window with"),
+    keywords: set("add after all alter analyze and anti archive array as asc at between bucket buckets by cache cascade case cast change clear cluster clustered codegen collection column columns comment commit compact compactions compute concatenate cost create cross cube current current_date current_timestamp database databases datata dbproperties defined delete delimited desc describe dfs directories distinct distribute drop else end escaped except exchange exists explain export extended external false fields fileformat first following for format formatted from full function functions global grant group grouping having if ignore import in index indexes inner inpath inputformat insert intersect interval into is items join keys last lateral lazy left like limit lines list load local location lock locks logical macro map minus msck natural no not null nulls of on option options or order out outer outputformat over overwrite partition partitioned partitions percent preceding principals purge range recordreader recordwriter recover reduce refresh regexp rename repair replace reset restrict revoke right rlike role role rollback rollup row rows schema schemas select semi separated serde serdeproperties set sets show skewed sort sorted start statistics stored stratify struct table tables tablesample tblproperties temp temporary terminated then to touch transaction transactions transform true truncate unarchive unbounded uncache union unlock unset use using values view when where window with"),
     builtin: set("tinyint smallint int bigint boolean float double string binary timestamp decimal array map struct uniontype delimited serde sequencefile textfile rcfile inputformat outputformat"),
     atoms: set("false true null"),
     operatorChars: /^[*+\-%<>!=~&|^]/,
     dateSQL: set("date time timestamp"),
-    support: set("ODBCdotTable doubleQuote zerolessFloat")
+    support: set("ODBCdotTable doubleQuote zerolesFloat")
   });
 
   // Esper
@@ -452,7 +452,7 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
     atoms: set("false true null"),
     operatorChars: /^[*+\-%<>!=&|^\/#@?~]/,
     dateSQL: set("time"),
-    support: set("decimallessFloat zerolessFloat binaryNumber hexNumber")
+    support: set("decimallessFloat zerolesFloat binaryNumber hexNumber")
   });
 }());
 
@@ -473,7 +473,7 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
   support:
     A list of supported syntaxes which are not common, but are supported by more than 1 DBMS.
     * ODBCdotTable: .tableName
-    * zerolessFloat: .1
+    * zerolesFloat: .1
     * doubleQuote
     * nCharCast: N'string'
     * charsetCast: _utf8'string'

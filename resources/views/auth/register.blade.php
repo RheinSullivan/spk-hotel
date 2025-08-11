@@ -1,4 +1,13 @@
 <x-guest-layout>
+      @if ($errors->any())
+        <div class="mb-4 text-red-600">
+            <ul class="list-disc list-inside text-sm">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -8,6 +17,12 @@
             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
+        <!-- Username -->
+<div class="mt-4">
+    <x-input-label for="username" :value="__('Username')" />
+    <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required />
+    <x-input-error :messages="$errors->get('username')" class="mt-2" />
+</div>
 
         <!-- Email Address -->
         <div class="mt-4">
@@ -43,10 +58,9 @@
             <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
             </a>
-
-            <x-primary-button class="ml-4">
-                {{ __('Register') }}
-            </x-primary-button>
+          <x-primary-button class="ml-4">
+    {{ __('Register') }}
+</x-primary-button>
         </div>
     </form>
 </x-guest-layout>

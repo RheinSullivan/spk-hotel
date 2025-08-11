@@ -7,10 +7,10 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-# Sistem Informasi Inventory Gudang
+# Sistem Informasi Inventory Dinsos
 
 
-Sistem Informasi Inventory Gudang Berbasis Web adalah aplikasi atau sistem yang digunakan untuk mengelola inventaris atau stok barang di dalam gudang melalui platform web. Sistem ini dirancang untuk memudahkan proses pengelolaan, pemantauan, dan pengendalian persediaan barang secara efisien.
+Sistem Informasi Inventory Dinsos Berbasis Web adalah aplikasi atau sistem yang digunakan untuk mengelola inventaris atau stok barang di dalam Dinsos melalui platform web. Sistem ini dirancang untuk memudahkan proses pengelolaan, pemantauan, dan pengendalian persediaan barang secara efisien.
 
 
 ## Fitur
@@ -19,7 +19,7 @@ Sistem Informasi Inventory Gudang Berbasis Web adalah aplikasi atau sistem yang 
     2. Jenis
     3. Satuan
     4. Perusahaan
-        - Customer
+        - Donatur
         - Supplier
 - Transaksi
     1. Barang Masuk
@@ -38,7 +38,7 @@ Sistem Informasi Inventory Gudang Berbasis Web adalah aplikasi atau sistem yang 
 
 ## Teknologi
 
-Sistem Informasi Inventory Gudang menggunakan beberapa Teknologi diantaranya :
+Sistem Informasi Inventory Dinsos menggunakan beberapa Teknologi diantaranya :
 
 - Laravel - The PHP Framework for Web Artisans
 - JavaScript - JavaScript, often abbreviated as JS, is a programming language that is one of the core technologies of the World Wide Web, alongside HTML and CSS.
@@ -50,10 +50,10 @@ Sistem Informasi Inventory Gudang menggunakan beberapa Teknologi diantaranya :
 
 Lakukan Clone Project/Unduh manual 
 
-Buat database dengan nama 'inventorygudang'
+Buat database dengan nama 'inventorydinsos'
 
 Jika melakukan Clone Project, rename file .env.example dengan env dan hubungkan
-database nya dengan mengisikan nama database, 'DB_DATABASE=inventorygudang'
+database nya dengan mengisikan nama database, 'DB_DATABASE=inventorydinsos'
 
 
 Kemudian, Ketik pada terminal :
@@ -81,15 +81,15 @@ Akses Aplikasi di Web browser
 
 
 ## Screenshoot
-![Screenshot_924-min](https://github.com/dwipurnomo12/inventorygudang/assets/105181667/a1d872ba-c3fb-4fe8-8dcd-62032a56e240)
+![Screenshot_924-min](https://github.com/dwipurnomo12/inventorydinsos/assets/105181667/a1d872ba-c3fb-4fe8-8dcd-62032a56e240)
 
-![Screenshot_925](https://github.com/dwipurnomo12/inventorygudang/assets/105181667/222bd666-0f6c-4814-b6c8-4b608164647d)
+![Screenshot_925](https://github.com/dwipurnomo12/inventorydinsos/assets/105181667/222bd666-0f6c-4814-b6c8-4b608164647d)
 
-![Screenshot_926](https://github.com/dwipurnomo12/inventorygudang/assets/105181667/b7e9824b-c8b5-4078-8d7d-7b26ffaf5460)
+![Screenshot_926](https://github.com/dwipurnomo12/inventorydinsos/assets/105181667/b7e9824b-c8b5-4078-8d7d-7b26ffaf5460)
 
-![Screenshot_927](https://github.com/dwipurnomo12/inventorygudang/assets/105181667/a0d2ad61-b4a2-470b-b7d4-40679328b1b2)
+![Screenshot_927](https://github.com/dwipurnomo12/inventorydinsos/assets/105181667/a0d2ad61-b4a2-470b-b7d4-40679328b1b2)
 
-![Screenshot_928](https://github.com/dwipurnomo12/inventorygudang/assets/105181667/d64360e9-8496-4f18-bee9-bf1f5223c792)
+![Screenshot_928](https://github.com/dwipurnomo12/inventorydinsos/assets/105181667/d64360e9-8496-4f18-bee9-bf1f5223c792)
 
 
 

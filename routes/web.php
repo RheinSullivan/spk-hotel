@@ -1,106 +1,89 @@
 <?php
-
-use App\Http\Controllers\ActivityLogController;
-use App\Models\Supplier;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\JenisController;
-use App\Http\Controllers\BarangController;
-use App\Http\Controllers\BarangKeluarController;
-use App\Http\Controllers\SatuanController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\HakAksesController;
-use App\Http\Controllers\LaporanBarangKeluarController;
-use App\Http\Controllers\LaporanBarangMasukController;
-use App\Http\Controllers\LaporanStokController;
+use App\Http\Controllers\HotelController;
+use App\Http\Controllers\KriteriaController;
+use App\Http\Controllers\BobotKriteriaController;
+use App\Http\Controllers\PenilaianController;
+use App\Http\Controllers\PerhitunganController;
+use App\Http\Controllers\HasilController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ManajemenUserController;
-use App\Http\Controllers\UbahPasswordController;
-use App\Models\BarangKeluar;
-use App\Models\BarangMasuk;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+// Registrasi
+Route::get('/register', [RegisteredUserController::class, 'create'])
+    ->middleware('guest')
+    ->name('register');
+Route::post('/register', [RegisteredUserController::class, 'store'])
+    ->middleware('guest');
 
-
+// Semua route yang butuh login
 Route::middleware('auth')->group(function () {
 
-    Route::group(['middleware' => 'checkRole:superadmin'], function(){
-        Route::get('/data-pengguna/get-data', [ManajemenUserController::class, 'getDataPengguna']);
-        Route::get('/api/role/', [ManajemenUserController::class, 'getRole']);
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Hasil
+    Route::get('/hasil/get-data', [HasilController::class, 'getData'])->name('hasil.getData');
+    Route::resource('/hasil', HasilController::class)->names('hasil');
+
+    // Route detail hotel untuk semua user
+    Route::get('/hotel/{id}', [HotelController::class, 'show'])->name('hotel.show');
+
+    // Profil user
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    /**
+     * Untuk ADMIN
+     */
+    Route::middleware('checkRole:admin')->group(function () {
+
+        // Manajemen user
+        Route::get('/data-pengguna/get-data', [ManajemenUserController::class, 'getData'])->name('data-pengguna.get-data');
         Route::resource('/data-pengguna', ManajemenUserController::class);
-    
-        Route::get('/hak-akses/get-data', [HakAksesController::class, 'getDataRole']);
-        Route::resource('/hak-akses', HakAksesController::class);
+        Route::get('/users/get-data', [ManajemenUserController::class, 'getData']);
+        Route::resource('/users', ManajemenUserController::class);
+
+        // Hotel CRUD (tanpa show karena sudah di luar)
+        Route::get('/hotels/get-data', [HotelController::class, 'getData'])->name('hotel.getData');
+        Route::delete('/hotel/image/{id}', [HotelController::class, 'deleteImage'])->name('hotel.image.delete');
+        Route::delete('/hotel/{id}', [HotelController::class, 'destroy'])->name('hotel.destroy');
+        Route::resource('hotels', HotelController::class)->except(['show'])->names('hotel');
+
+        // Kriteria
+        Route::get('/kriteria/get-data', [KriteriaController::class, 'getData'])->name('kriteria.getData');
+        Route::resource('kriteria', KriteriaController::class)->names('kriteria');
+
+        // Bobot Kriteria
+        Route::get('/bobot-kriteria/get-data', [BobotKriteriaController::class, 'getData'])->name('bobot.getData');
+        Route::resource('/bobot-kriteria', BobotKriteriaController::class)
+            ->names('bobot')
+            ->parameters(['bobot-kriteria' => 'bobot']);
+
+        // Penilaian
+        Route::get('/penilaian/get-data', [PenilaianController::class, 'getData'])->name('penilaian.getData');
+        Route::resource('/penilaian', PenilaianController::class)->names('penilaian');
+
+        // Perhitungan
+        Route::get('/perhitungan/get-data', [PerhitunganController::class, 'getData'])->name('perhitungan.getData');
+        Route::resource('/perhitungan', PerhitunganController::class);
     });
 
-    Route::group(['middleware' => 'checkRole:superadmin,kepala gudang'], function(){
-        Route::resource('/aktivitas-user', ActivityLogController::class);
-        
+    /**
+     * Untuk USER biasa
+     */
+    Route::middleware('checkRole:user')->group(function () {
+        // Kalau nanti ada route khusus user, taruh di sini
     });
-
-    Route::group(['middleware' => 'checkRole:kepala gudang,superadmin,admin gudang'], function(){
-        Route::resource('/dashboard', DashboardController::class);
-        Route::get('/', [DashboardController::class, 'index']);
-        
-        Route::get('/laporan-stok/get-data', [LaporanStokController::class, 'getData']);
-        Route::get('/laporan-stok/print-stok', [LaporanStokController::class, 'printStok']);
-        Route::get('/api/satuan/', [LaporanStokController::class, 'getSatuan']);
-        Route::resource('/laporan-stok', LaporanStokController::class);
-       
-        Route::get('/laporan-barang-masuk/get-data', [LaporanBarangMasukController::class, 'getData']);
-        Route::get('/laporan-barang-masuk/print-barang-masuk', [LaporanBarangMasukController::class, 'printBarangMasuk']);
-        Route::get('/api/supplier/', [LaporanBarangMasukController::class, 'getSupplier']);
-        Route::resource('/laporan-barang-masuk', LaporanBarangMasukController::class);
-    
-        Route::get('/laporan-barang-keluar/get-data', [LaporanBarangKeluarController::class, 'getData']);
-        Route::get('/laporan-barang-keluar/print-barang-keluar', [LaporanBarangKeluarController::class, 'printBarangKeluar']);
-        Route::get('/api/customer/', [LaporanBarangKeluarController::class, 'getCustomer']);
-        Route::resource('/laporan-barang-keluar', LaporanBarangKeluarController::class);
-
-        Route::get('/ubah-password', [UbahPasswordController::class,'index']);
-        Route::POST('/ubah-password', [UbahPasswordController::class, 'changePassword']);
-    });
-
-
-    Route::group(['middleware' => 'checkRole:superadmin,admin gudang'], function(){
-        Route::get('/barang/get-data', [BarangController::class, 'getDataBarang']);
-        Route::resource('/barang', BarangController::class);
-    
-        Route::get('/jenis-barang/get-data', [JenisController::class, 'getDataJenisBarang']);
-        Route::resource('/jenis-barang', JenisController::class);
-    
-        Route::get('/satuan-barang/get-data', [SatuanController::class, 'getDataSatuanBarang']);
-        Route::resource('/satuan-barang', SatuanController::class);
-    
-        Route::get('/supplier/get-data', [SupplierController::class, 'getDataSupplier']);
-        Route::resource('/supplier', SupplierController::class);
-    
-        Route::get('/customer/get-data', [CustomerController::class, 'getDataCustomer']);
-        Route::resource('/customer', CustomerController::class);
-    
-        Route::get('/api/barang-masuk/', [BarangMasukController::class, 'getAutoCompleteData']);
-        Route::get('/barang-masuk/get-data', [BarangMasukController::class, 'getDataBarangMasuk']);
-        Route::get('/api/satuan/', [BarangMasukController::class, 'getSatuan']);
-        Route::resource('/barang-masuk', BarangMasukController::class);
-    
-        Route::get('/api/barang-keluar/', [BarangKeluarController::class, 'getAutoCompleteData']);
-        Route::get('/barang-keluar/get-data', [BarangKeluarController::class, 'getDataBarangKeluar']);
-        Route::get('/api/satuan/', [BarangKeluarController::class, 'getSatuan']);
-        Route::resource('/barang-keluar', BarangKeluarController::class);
-    });
-
-
 });
 
+// Auth routes bawaan Laravel Breeze/Fortify
 require __DIR__.'/auth.php';
+
+// Redirect kalau route tidak ditemukan
+Route::fallback(function () {
+    return redirect()->route('login');
+});

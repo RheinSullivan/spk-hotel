@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hotel;
 use App\Models\User;
-use App\Models\Barang;
-use App\Models\BarangMasuk;
-use App\Models\BarangKeluar;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,39 +14,25 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $barangCount        = Barang::all()->count();
-        $barangMasukCount   = BarangMasuk::all()->count();
-        $barangKeluarCount  = BarangKeluar::all()->count();
-        $userCount          = User::all()->count();
-        $barangMasukPerBulan = BarangMasuk::selectRaw('DATE_FORMAT(tanggal_masuk, "%Y-%m") as date, SUM(jumlah_masuk) as total')
-            ->groupBy('date')
-            ->get()
-            ->map(function ($data) {
-                $data->date = date('Y-m', strtotime($data->date));
-                $data->total = (int) $data->total;
-                return $data;
-        });
-        $barangKeluarPerBulan = BarangKeluar::selectRaw('DATE_FORMAT(tanggal_keluar, "%Y-%m") as date, SUM(jumlah_keluar) as total')
-            ->groupBy('date')
-            ->get()
-            ->map(function ($data) {
-                $data->date = date('Y-m', strtotime($data->date));
-                $data->total = (int) $data->total;
-                return $data;
-        });
-    
-        $barangMinimum = Barang::where('stok', '<=', 10)->get();
-        
-                                
-        return view('dashboard', [
-            'barang'            => $barangCount,
-            'barangMasuk'       => $barangMasukCount,
-            'barangKeluar'      => $barangKeluarCount,
-            'user'              => $userCount,
-            'barangMasukData'   => $barangMasukPerBulan,
-            'barangKeluarData'  => $barangKeluarPerBulan,
-            'barangMinimum'     => $barangMinimum
-        ]);
+        $user = auth()->user();
+
+        if ($user->role === 'admin') {
+            $jumlahHotel = Hotel::count();
+            $jumlahPengguna = User::count();
+
+            return view('dashboard.admin', [
+                'jumlahHotel' => $jumlahHotel,
+                'jumlahPengguna' => $jumlahPengguna,
+            ]);
+        }
+
+        if ($user->role === 'user') {
+            // User biasa diarahkan ke dashboard user
+            return view('dashboard.user');
+        }
+
+        // Jika role tidak dikenali
+        return abort(403, 'Unauthorized action.');
     }
 
     /**

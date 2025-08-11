@@ -72,7 +72,7 @@
   <div class="col-lg-6 col-md-6 col-sm-6 col-6">
     <div class="card">
       <div class="card-header">
-        <h4>Grafik Barang Masuk & Barang Keluar</h4>
+        <h4>Grafik Barang Masuk & Barang Keluar (Jumlah Barang)</h4>
       </div>
       <div class="card-body">
         <canvas id="summaryChart"></canvas>
@@ -114,52 +114,54 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-var ctx = document.getElementById('summaryChart').getContext('2d');
+    var ctx = document.getElementById('summaryChart').getContext('2d');
+
     var chart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: [
-          @foreach($barangMasukData as $data)
-              '{{ date("F", strtotime($data->date)) }}',
-          @endforeach
-        ],
-        datasets: [
-          {
-            label : 'Barang Masuk',
-            data: [
+        type: 'bar',
+        data: {
+            labels: [
                 @foreach($barangMasukData as $data)
-                    '{{ $data->total }}',
+                    '{{ $data->date }}', // Display the formatted date
                 @endforeach
             ],
-            backgroundColor: 'blue'
-          },
-          {
-            label : 'Barang Keluar',
-            data: [
-                @foreach($barangKeluarData as $data)
-                    '{{ $data->total }}',
-                @endforeach
-            ],
-            backgroundColor: 'red'
-          }
-        ]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-            precision: 0,
-            stepSize: 1,
-            ticks: {
-              callback: function(value) {
-                if (value % 1 === 0) {
-                  return value;
+            datasets: [
+                {
+                    label: 'Barang Masuk',
+                    data: [
+                        @foreach($barangMasukData as $data)
+                            {{ $data->total }},
+                        @endforeach
+                    ],
+                    backgroundColor: 'blue'
+                },
+                {
+                    label: 'Barang Keluar',
+                    data: [
+                        @foreach($barangKeluarData as $data)
+                            {{ $data->total }},
+                        @endforeach
+                    ],
+                    backgroundColor: 'red'
                 }
-              }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    precision: 0,
+                    stepSize: 1,
+                    ticks: {
+                        callback: function(value) {
+                            if (value % 1 === 0) {
+                                return value;
+                            }
+                        }
+                    }
+                }
             }
-          }
         }
-      }
     });
 </script>
 @endpush
+

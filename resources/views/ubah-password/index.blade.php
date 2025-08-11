@@ -44,8 +44,13 @@ $(document).ready(function(){
     $('#ubahPassword').submit(function(e){
         e.preventDefault();
 
-        let current_password    = $('#current_password').val();            
-        let passwordNew         = $('#passwordNew').val();            
+        // Sembunyikan semua alert yang mungkin ada sebelumnya
+        $('#alert-current_password').removeClass('d-block').addClass('d-none');
+        $('#alert-passwordNew').removeClass('d-block').addClass('d-none');
+        $('#alert-konfirmasiPassword').removeClass('d-block').addClass('d-none');
+
+        let current_password    = $('#current_password').val();
+        let passwordNew         = $('#passwordNew').val();
         let konfirmasiPassword  = $('#konfirmasiPassword').val();
         let token               = $("meta[name='csrf-token']").attr("content");
 
@@ -64,10 +69,12 @@ $(document).ready(function(){
             processData: false,
 
             success:function(response){
+                // Reset form input values
                 $('#current_password').val('');
                 $('#passwordNew').val('');
                 $('#konfirmasiPassword').val('');
 
+                // Tampilkan success alert
                 Swal.fire({
                     type: 'success',
                     icon: 'success',
@@ -77,24 +84,19 @@ $(document).ready(function(){
                 });
             },
             error:function(error){
+                // Menangani error dan menampilkan pesan alert jika ada
                 if (error.responseJSON && error.responseJSON.current_password) {
-                    $('#alert-current_password').removeClass('d-none');
-                    $('#alert-current_password').addClass('d-block');
-
+                    $('#alert-current_password').removeClass('d-none').addClass('d-block');
                     $('#alert-current_password').text(error.responseJSON.current_password);
                 }
 
                 if (error.responseJSON && error.responseJSON.passwordNew) {
-                    $('#alert-passwordNew').removeClass('d-none');
-                    $('#alert-passwordNew').addClass('d-block');
-
+                    $('#alert-passwordNew').removeClass('d-none').addClass('d-block');
                     $('#alert-passwordNew').text(error.responseJSON.passwordNew);
                 }
 
                 if (error.responseJSON && error.responseJSON.konfirmasiPassword) {
-                    $('#alert-konfirmasiPassword').removeClass('d-none');
-                    $('#alert-konfirmasiPassword').addClass('d-block');
-
+                    $('#alert-konfirmasiPassword').removeClass('d-none').addClass('d-block');
                     $('#alert-konfirmasiPassword').text(error.responseJSON.konfirmasiPassword);
                 }
             }
