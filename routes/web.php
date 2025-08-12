@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
         // Hotel CRUD (tanpa show karena sudah di luar)
         Route::get('/hotels/get-data', [HotelController::class, 'getData'])->name('hotel.getData');
         Route::delete('/hotel/image/{id}', [HotelController::class, 'deleteImage'])->name('hotel.image.delete');
+        Route::get('/hotel/getHotelData/{id}', [App\Http\Controllers\HotelController::class, 'getHotelData'])->name('hotel.getHotelData');
         Route::delete('/hotel/{id}', [HotelController::class, 'destroy'])->name('hotel.destroy');
         Route::resource('hotels', HotelController::class)->except(['show'])->names('hotel');
 

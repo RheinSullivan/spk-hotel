@@ -134,4 +134,10 @@ class HotelController extends Controller
 
         return back()->with('success', 'Gambar berhasil dihapus');
     }
+
+    public function getHotelData($id)
+    {
+        $hotel = Hotel::with('images')->findOrFail($id);
+        return response()->json($hotel);
+    }
 }
